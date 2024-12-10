@@ -10,7 +10,6 @@ import UIKit
 class CollectionViewCellImage: UICollectionViewCell {
     private let imageView: UIImageView = {
         let imageView = UIImageView()
-      //  imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.backgroundColor = .white
         return imageView

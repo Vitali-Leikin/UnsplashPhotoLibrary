@@ -19,6 +19,9 @@ ___
   * UICollectionView
   * Gesture Recognizer
   * UIRefreshcontrol
+  * Task async await
+  * Dispatch Queues
+  
   
 
 ___

@@ -13,24 +13,24 @@ enum NetworkError: Error {
 }
 
 public class NetworkManager {
-    
-    static let shared =  NetworkManager()
+    // MARK: property
+    static let shared = NetworkManager()
     private var urlString: String =  "https://api.unsplash.com/photos/?client_id=AksxsEPVe4Zh71nkJF6mXuasV5crK-9QpBG4NlGXtDU&per_page=30&page="
     private init(){}
-    private var counter  = 0
+    private var counter = 1
     private var countDown = 300
     
+    // MARK: obtain data funcs
     func obtainNewData(completionHandler: @escaping (_ result: Result<[LoadedModel], NetworkError>) -> Void) {
         counter += 1
-         if counter >= 300{
+         if counter >= 300 {
              counter = 1
          }
-        var str = urlString + String(counter)
+        let str = urlString + String(counter)
         guard let url = URL(string: str) else {
             completionHandler(Result.failure(.urlError))
             return
         }
-        
         URLSession.shared.dataTask(with: url) { dataResponse, urlResponse, err in
             if err == nil,
                let data = dataResponse,
@@ -43,18 +43,16 @@ public class NetworkManager {
         }.resume()
     }
     
-    
     func obtainRefreshData(completionHandler: @escaping (_ result: Result<[LoadedModel], NetworkError>) -> Void) {
         countDown -= 1
-        if countDown <= 0{
+        if countDown <= 1{
             countDown = 300
          }
-        var str = urlString + String(countDown)
+        let str = urlString + String(countDown)
         guard let url = URL(string: str) else {
             completionHandler(Result.failure(.urlError))
             return
         }
-        
         URLSession.shared.dataTask(with: url) { dataResponse, urlResponse, err in
             if err == nil,
                let data = dataResponse,

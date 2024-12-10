@@ -43,15 +43,12 @@ class CollectionViewCellImage: UICollectionViewCell {
         guard let dataSource = dataSource else {return}
         if dataSource.isLike{
             dataSource.isLike.toggle()
-            print("isLIKE")
             DataManager.shared.removeOneObject(id: dataSource.id)
-            likeButton.setImage(UIImage(systemName: "heart"), for: .normal)
+            likeButton.setImage(UIImage(systemName: UISet.S.heart.rawValue), for: .normal)
         }else{
-            
             dataSource.isLike.toggle()
             DataManager.shared.saveCellobject(object: dataSource)
-            likeButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
-            print("DONt like")
+            likeButton.setImage(UIImage(systemName: UISet.S.heartFill.rawValue), for: .normal)
         }
     }
     
@@ -76,9 +73,9 @@ class CollectionViewCellImage: UICollectionViewCell {
             }
         }
         if dataSource.isLike {
-            likeButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+            likeButton.setImage(UIImage(systemName: UISet.S.heartFill.rawValue), for: .normal)
         }else{
-            likeButton.setImage(UIImage(systemName: "heart"), for: .normal)
+            likeButton.setImage(UIImage(systemName: UISet.S.heart.rawValue), for: .normal)
         }
         setupLayout()
     }

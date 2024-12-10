@@ -49,9 +49,15 @@ class DataManager{
             print("Error save" , error.localizedDescription)
         }
     }
+    func saveObjectDeatil(image: UIImage, object: DetailVCModel ){
+        let imageSave = DataManager.shared.saveImage(image: image)
+        guard let checkSaveImg = imageSave, let checkedDescript = object.description, let checkID = object.id else {return}
+        let objectSave = StorageModel(imageName: checkSaveImg, description: checkedDescript , id: checkID, isLike: object.isLike)
+        DataManager.shared.saveData([objectSave])
+    }
     
     func saveCellobject(object: CellViewModel){
-        guard let safeImage = object.fullImageUrl else{print(NetworkError.canNotParseData)
+        guard let safeImage = object.imageUrl else{print(NetworkError.canNotParseData)
             return}
         Task{
             do{
@@ -67,6 +73,7 @@ class DataManager{
             }
         }
     }
+    
     func saveImage(image: UIImage) -> String? {
         guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return nil}
         
@@ -77,20 +84,15 @@ class DataManager{
         if FileManager.default.fileExists(atPath: fileURL.path) {
             do {
                 try FileManager.default.removeItem(atPath: fileURL.path)
-             //   print("Removed old image")
             } catch let removeError {
-              //  print("couldn't remove file at path", removeError)
             }
         }
-        
         do {
             try data.write(to: fileURL)
             return fileName
         } catch let error {
-        //    print("error saving file with error", error)
             return nil
         }
-        
     }
     // MARK: - obtain and load public func
     func obtainSaveData() -> [StorageModel]{

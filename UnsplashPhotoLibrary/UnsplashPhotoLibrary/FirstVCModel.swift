@@ -9,8 +9,7 @@ import Foundation
 
 
 class FirstVCModel{
-    
-    var isLoading: Observable<Bool> = Observable(false)
+    // MARK: property
     var cellDataSource: Observable<[LoadedModel]> = Observable(nil)
     private var dataSourse: [LoadedModel] = []
     private var network = NetworkManager.shared
@@ -18,10 +17,9 @@ class FirstVCModel{
     private func mapLoadedData() {
         cellDataSource.value = self.dataSourse
       }
-
+    // MARK: funcs get data
     func getData(){
         network.obtainNewData {[weak self] result in
-            self?.isLoading.value = false
             switch result {
             case .success(let data):
                 self?.dataSourse += data
@@ -34,7 +32,6 @@ class FirstVCModel{
     
     func getRefreshData(){
         network.obtainRefreshData{[weak self] result in
-            self?.isLoading.value = false
             switch result {
             case .success(let data):
                 self?.dataSourse = data

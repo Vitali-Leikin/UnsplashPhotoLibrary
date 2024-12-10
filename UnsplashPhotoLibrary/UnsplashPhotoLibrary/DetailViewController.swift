@@ -37,7 +37,7 @@ class DetailViewController: UIViewController {
     }()
     
     private lazy var likeBarButton: UIBarButtonItem = {
-        let barButtonItem = UIBarButtonItem(image: UIImage(systemName:"heart"), style: .plain, target: self, action: #selector(didSelectButtonClicked(_:)))
+        let barButtonItem = UIBarButtonItem(image: UIImage(systemName:UISet.S.heart.rawValue), style: .plain, target: self, action: #selector(didSelectButtonClicked(_:)))
         return barButtonItem
     }()
     
@@ -54,7 +54,7 @@ class DetailViewController: UIViewController {
     // MARK: - LifeCycle func
     init(viewModel: DetailVCModel) {
         self.viewModel = viewModel
-        dataSourseItem = viewModel.obtainSavedData()
+        print(viewModel.id)
         super.init(nibName: nil, bundle: nil)
 
     }
@@ -65,26 +65,38 @@ class DetailViewController: UIViewController {
         super.viewDidLoad()
         configure()
         setupBarButtonItems()
-        checViewLikeButton()
+        dataSourseItem = DataManager.shared.obtainSaveData() //viewModel.obtainSavedData()
+        
+        for item in dataSourseItem{
+            print("datasource = \(item.id)")
+        }
+        print("viewModel = \(viewModel.id!)")
+      //  checViewLikeButton()
 
     }
- 
+    
     override func viewIsAppearing(_ animated: Bool) {
         super.viewIsAppearing(animated)
         setupLayout()
+//        dataSourseItem = viewModel.obtainSavedData()
         checViewLikeButton()
     }
     
     // MARK: - private
     
    private func checViewLikeButton(){
+       dataSourseItem = viewModel.obtainSavedData()
        for item in dataSourseItem{
+           print("item = \(item.id)")
+           print("Check viewModel = \(viewModel.id!)")
            if self.viewModel.id! == item.id{
                self.viewModel.isLike = item.isLike
-               likeBarButton.image = UIImage(systemName:"heart.fill" )
+               likeBarButton.image = UIImage(systemName: UISet.S.heartFill.rawValue)
+               print("OK")
                break
            }else{
-               likeBarButton.image = UIImage(systemName:"heart" )
+               likeBarButton.image = UIImage(systemName: UISet.S.heart.rawValue)
+               print("NO")
            }
        }
     }
@@ -93,13 +105,13 @@ class DetailViewController: UIViewController {
     @objc
     private func didSelectButtonClicked(_ sender: UIBarButtonItem) {
         if viewModel.isLike == true{
-            likeBarButton.image = UIImage(systemName:"heart" )
+            likeBarButton.image = UIImage(systemName:UISet.S.heart.rawValue)
             viewModel.isLike.toggle()
             viewModel.removeObject()
         }else{
-            likeBarButton.image = UIImage(systemName:"heart.fill" )
+            likeBarButton.image = UIImage(systemName:UISet.S.heartFill.rawValue)
             viewModel.isLike.toggle()
-            viewModel.saveObject(image: imageView.image)
+            viewModel.saveObject(image: imageView.image, object: viewModel)
         }
     }
  
@@ -122,8 +134,8 @@ class DetailViewController: UIViewController {
                 imageView.image = try await ImageNetworkManager.shared.downloadImage(by:stringURL)
                 self.descriptionImageLabel.text = viewModel.description
             }catch{
-                imageView.image = UIImage(systemName: "xmark.icloud")
-                descriptionImageLabel.text = ""
+                imageView.image = UIImage(systemName:UISet.S.errorLoadImg.rawValue)
+             //   descriptionImageLabel.text = ""
                 likeBarButton.isEnabled = false
             }
         }

@@ -7,15 +7,17 @@
 
 import UIKit
 class SaveViewController: UIViewController {
-
+    // MARK: - var property
     var dataSourse: [StorageModel] = []
+//    var viewModel = SaveVCModel()
     
-    lazy var collectionView: UICollectionView = {
+    // MARK: - lazy property
+    private lazy var collectionView: UICollectionView = {
         var collection = UICollectionView(
-            frame: CGRect(x:  UIProperty.position.rawValue,
-                          y: Int(view.safeAreaInsets.top) + UIProperty.position.rawValue,
-                          width: Int(view.bounds.width) - UIProperty.position.rawValue * 2,
-                          height: Int(view.bounds.height - CGFloat((UIProperty.heightTitleLabel.rawValue + UIProperty.heightCVCell.rawValue)))),
+            frame: CGRect(x:  UISet.N.position.rawValue,
+                          y: Int(view.safeAreaInsets.top) + UISet.N.position.rawValue,
+                          width: Int(view.bounds.width) - UISet.N.position.rawValue * 2,
+                          height: Int(view.bounds.height - CGFloat((UISet.N.heightTitleLabel.rawValue + UISet.N.heightCVCell.rawValue)))),
             collectionViewLayout: layout)
         
         collection.translatesAutoresizingMaskIntoConstraints = false
@@ -27,14 +29,11 @@ class SaveViewController: UIViewController {
         return collection
     }()
     
-    
-
     private lazy var layout: UICollectionViewFlowLayout = {
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         let wSize = ((view.bounds.size.width - 3) / 3)
         layout.itemSize = CGSize(width: wSize, height: wSize)
-        //CGSize(width: Int((view.bounds.width) - CGFloat(positionX)) / 2, height: heightCVCell)
         layout.minimumInteritemSpacing = CGFloat(1)
         layout.minimumLineSpacing = CGFloat(1)
         layout.scrollDirection = .vertical
@@ -43,29 +42,28 @@ class SaveViewController: UIViewController {
     
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
-        //  imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.backgroundColor = .white
         return imageView
     }()
-    
-        private  lazy var deleteBarButton: UIBarButtonItem = {
-            let barButtonItem = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(callAlertDelete))
-            return barButtonItem
-        }()
-    
+    private  lazy var deleteBarButton: UIBarButtonItem = {
+        let barButtonItem = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(callAlertDelete))
+        return barButtonItem
+    }()
+
+    // MARK: - LifeCycle func
     init() {
         super.init(nibName: nil, bundle: nil)
-        
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         dataSourse = DataManager.shared.obtainSaveData()
+//        viewModel.obtainSaveData()
+     //   bindViewModel()
         view.backgroundColor = .white
         setupBarButtonItems()
     }
@@ -74,9 +72,20 @@ class SaveViewController: UIViewController {
         super.viewIsAppearing(animated)
         setupConstraintsColectionView()
     }
+    // MARK:  setup and conf. funcs
     private func setupBarButtonItems() {
         navigationItem.rightBarButtonItems = [deleteBarButton]
     }
+    
+    
+//    func bindViewModel() {
+//        self.viewModel.saveVCModel.bind { [weak self] items in
+//            guard let self = self,
+//                  let checkedData = items else{return}
+//            self.dataSourse = checkedData
+//            self.collectionView.reloadData()
+//        }
+//    }
     
     func setupConstraintsColectionView(){
         view.addSubview(collectionView)
@@ -86,12 +95,10 @@ class SaveViewController: UIViewController {
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
-        
     }
-    
+    // MARK: - @objc funcs
     @objc
     func callAlertDelete(){
-        print("Delete ALL")
         DataManager.shared.removeAllObject()
         dataSourse = []
         collectionView.reloadData()
@@ -99,19 +106,4 @@ class SaveViewController: UIViewController {
 }
 
 
-
-extension SaveViewController: UICollectionViewDelegate, UICollectionViewDataSource{
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        dataSourse.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SaveCollectionViewCell.obtainCellName(), for: indexPath) as? SaveCollectionViewCell else {return UICollectionViewCell()}
-        
-        cell.configereCell(by: dataSourse[indexPath.row])
-        
-        return cell
-    }
-    
-}
 

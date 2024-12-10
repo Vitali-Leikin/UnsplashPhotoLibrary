@@ -9,17 +9,17 @@ import UIKit
 
 class FirstCollectionVC: UIViewController {
     // MARK: - var property
-    
-    var viewModel: FirstVCModel = FirstVCModel()
     var dataSource:[LoadedModel] = []
-    let refreshControl = UIRefreshControl()
+    var viewModel = FirstVCModel()
+    private let refreshControl = UIRefreshControl()
+    
     // MARK: - lazy property
-    lazy var collectionView: UICollectionView = {
+    private lazy var collectionView: UICollectionView = {
         var collection = UICollectionView(
-            frame: CGRect(x:  UIProperty.position.rawValue,
-                          y: Int(view.safeAreaInsets.top) + UIProperty.position.rawValue,
-                          width: Int(view.bounds.width) - UIProperty.position.rawValue * 2,
-                          height: Int(view.bounds.height - CGFloat((UIProperty.heightTitleLabel.rawValue + UIProperty.heightCVCell.rawValue)))),
+            frame: CGRect(x:  UISet.N.position.rawValue,
+                          y: Int(view.safeAreaInsets.top) + UISet.N.position.rawValue,
+                          width: Int(view.bounds.width) - UISet.N.position.rawValue * 2,
+                          height: Int(view.bounds.height - CGFloat((UISet.N.heightTitleLabel.rawValue + UISet.N.heightCVCell.rawValue)))),
             collectionViewLayout: layout)
         collection.translatesAutoresizingMaskIntoConstraints = false
         collection.delegate = self
@@ -29,7 +29,6 @@ class FirstCollectionVC: UIViewController {
         collection.register(CollectionViewCellImage.self, forCellWithReuseIdentifier: CollectionViewCellImage.obtainCellName())
         return collection
     }()
-    
     
     private lazy var layout: UICollectionViewFlowLayout = {
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
@@ -53,7 +52,7 @@ class FirstCollectionVC: UIViewController {
     
     override func viewIsAppearing(_ animated: Bool) {
         super.viewIsAppearing(animated)
-        navigationItem.title = "Unsplash Photo Library"
+        navigationItem.title = UISet.S.nameApp.rawValue
         setupConstraintsColectionView()
         bindViewModel()
     }
@@ -72,7 +71,6 @@ class FirstCollectionVC: UIViewController {
     func setupRefreshControl(){
         refreshControl.addTarget(self, action: #selector(appendNewElements), for: .valueChanged)
         collectionView.refreshControl = refreshControl
-
     }
     private func setupBarButtonItems() {
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(openDetails))
@@ -107,7 +105,6 @@ class FirstCollectionVC: UIViewController {
         let controller = DetailViewController(viewModel: detailsModel)
         self.navigationController?.pushViewController(controller, animated: true)
     }
-    
     
     // MARK: - refresh CollectionView func
     

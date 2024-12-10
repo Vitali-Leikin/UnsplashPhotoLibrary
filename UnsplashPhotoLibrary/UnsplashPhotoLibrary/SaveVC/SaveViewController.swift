@@ -1,17 +1,15 @@
 //
-//  ViewController.swift
+//  SaveViewController.swift
 //  UnsplashPhotoLibrary
 //
 //  Created by Vitali on 10/12/2024.
 //
 
 import UIKit
-
-class FirstCollectionVC: UIViewController {
+class SaveViewController: UIViewController {
     // MARK: - var property
-    var dataSource:[LoadedModel] = []
-    var viewModel = FirstVCModel()
-    private let refreshControl = UIRefreshControl()
+    var dataSourse: [StorageModel] = []
+    var viewModel = SaveVCModel()
     
     // MARK: - lazy property
     private lazy var collectionView: UICollectionView = {
@@ -26,7 +24,7 @@ class FirstCollectionVC: UIViewController {
         collection.dataSource = self
         collection.isUserInteractionEnabled = true
         collection.backgroundColor = .white
-        collection.register(CollectionViewCellImage.self, forCellWithReuseIdentifier: CollectionViewCellImage.obtainCellName())
+        collection.register(SaveCollectionViewCell.self, forCellWithReuseIdentifier: SaveCollectionViewCell.obtainCellName())
         return collection
     }()
     
@@ -41,23 +39,58 @@ class FirstCollectionVC: UIViewController {
         return layout
     }()
     
+    private lazy var imageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.backgroundColor = .white
+        return imageView
+    }()
+    private  lazy var deleteBarButton: UIBarButtonItem = {
+        let barButtonItem = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(callAlertDelete))
+        return barButtonItem
+    }()
+
     // MARK: - LifeCycle func
+    init() {
+        super.init(nibName: nil, bundle: nil)
+    }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
+      //  dataSourse = DataManager.shared.obtainSaveData()
+        viewModel.obtainSaveData()
+        bindViewModel()
         view.backgroundColor = .white
-        viewModel.getData()
         setupBarButtonItems()
-        setupRefreshControl()
+        swipeSaveVCtoFirstVC()
     }
     
     override func viewIsAppearing(_ animated: Bool) {
         super.viewIsAppearing(animated)
-        navigationItem.title = UISet.S.nameApp.rawValue
         setupConstraintsColectionView()
-        bindViewModel()
+    }
+    // MARK:  setup and conf. funcs
+    private func setupBarButtonItems() {
+        navigationItem.rightBarButtonItems = [deleteBarButton]
+    }
+   private func swipeSaveVCtoFirstVC(){
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(returnToFirstVC))
+        swipeLeft.direction = .right
+        self.view.addGestureRecognizer(swipeLeft)
+    }
+
+   private func bindViewModel() {
+        self.viewModel.saveVCModel.bind { [weak self] items in
+            guard let self = self,
+                  let checkedData = items else{return}
+            self.dataSourse = checkedData
+            self.collectionView.reloadData()
+        }
     }
     
-    // MARK: - Setup Layout func
     func setupConstraintsColectionView(){
         view.addSubview(collectionView)
         NSLayoutConstraint.activate([
@@ -67,53 +100,17 @@ class FirstCollectionVC: UIViewController {
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
-    
-    func setupRefreshControl(){
-        refreshControl.addTarget(self, action: #selector(appendNewElements), for: .valueChanged)
-        collectionView.refreshControl = refreshControl
-    }
-    private func setupBarButtonItems() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(openDetails))
-    }
-    
-    // MARK: -  functions
-    func bindViewModel() {
-        viewModel.cellDataSource.bind { [weak self] itemData in
-            guard let self = self,
-                  let imageData = itemData else {
-                return
-            }
-            self.dataSource = imageData
-            self.reloadCollectionView()
-        }
+    // MARK: - @objc funcs
+    @objc
+    func callAlertDelete(){
+        DataManager.shared.removeAllObject()
+        dataSourse = []
+        collectionView.reloadData()
     }
     
     @objc
-    func openDetails() {
-        let controller = SaveViewController()
-        self.navigationController?.pushViewController(controller, animated: true)
-    }
-
-    func reloadCollectionView(){
-        DispatchQueue.main.async{
-            self.collectionView.reloadData()
-        }
-    }
-    
-    func goToDetailViewController(indexPath: IndexPath){
-        let detailsModel = DetailVCModel(model: dataSource[indexPath.row])
-        let controller = DetailViewController(viewModel: detailsModel)
-        self.navigationController?.pushViewController(controller, animated: true)
-    }
-    
-    // MARK: - refresh CollectionView func
-    
-    @objc
-    func appendNewElements(){
-        refreshControl.beginRefreshing()
-        viewModel.getRefreshData()
-        refreshControl.endRefreshing()
-        reloadCollectionView()
+    func returnToFirstVC(){
+        navigationController?.popToRootViewController(animated: true)
     }
 }
 

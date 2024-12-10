@@ -17,6 +17,10 @@ class FirstVCModel{
     private func mapLoadedData() {
         cellDataSource.value = self.dataSourse
       }
+    
+    func obtainNumbersOfrows() -> Int{
+        dataSourse.count
+    }
     // MARK: funcs get data
     func getData(){
         network.obtainNewData {[weak self] result in

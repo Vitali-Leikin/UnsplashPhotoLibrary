@@ -69,7 +69,7 @@ class DataManager{
                 let objectSave = StorageModel(imageName: checkedImg, description: object.describe, id: object.id, isLike: object.isLike)
                 DataManager.shared.saveData([objectSave])
             }catch{
-                NetworkError.canNotParseData
+                print(NetworkError.canNotParseData)
             }
         }
     }
@@ -85,12 +85,14 @@ class DataManager{
             do {
                 try FileManager.default.removeItem(atPath: fileURL.path)
             } catch let removeError {
+                print("error remove",removeError.localizedDescription )
             }
         }
         do {
             try data.write(to: fileURL)
             return fileName
         } catch let error {
+            print("error write file",error.localizedDescription )
             return nil
         }
     }

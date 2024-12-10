@@ -51,8 +51,6 @@ class CollectionViewCellImage: UICollectionViewCell {
             likeButton.setImage(UIImage(systemName: UISet.S.heartFill.rawValue), for: .normal)
         }
     }
-    
-    
     // MARK: - setup Layout and cofigure Cell
     
     func configereCell(by dataSource: CellViewModel){
@@ -70,6 +68,8 @@ class CollectionViewCellImage: UICollectionViewCell {
                 imageView.image = image
             }catch{
                 print("error load image")
+                imageView.image = nil
+                imageView.image = UIImage(systemName: UISet.S.errorLoadImg.rawValue)
             }
         }
         if dataSource.isLike {

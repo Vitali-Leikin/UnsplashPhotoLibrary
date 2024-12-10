@@ -27,15 +27,15 @@ class DetailViewController: UIViewController {
         label.textAlignment = .center
         return label
     }()
-    
-    private lazy var authorNameLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.numberOfLines = 0
-        label.textAlignment = .natural
-        return label
-    }()
-    
+//    
+//    private lazy var authorNameLabel: UILabel = {
+//        let label = UILabel()
+//        label.translatesAutoresizingMaskIntoConstraints = false
+//        label.numberOfLines = 0
+//        label.textAlignment = .natural
+//        return label
+//    }()
+//    
     private lazy var likeBarButton: UIBarButtonItem = {
         let barButtonItem = UIBarButtonItem(image: UIImage(systemName:UISet.S.heart.rawValue), style: .plain, target: self, action: #selector(didSelectButtonClicked(_:)))
         return barButtonItem
@@ -48,13 +48,12 @@ class DetailViewController: UIViewController {
         stack.distribution = .fillEqually
         stack.axis = .vertical
         stack.addArrangedSubview(descriptionImageLabel)
-        stack.addArrangedSubview(authorNameLabel)
+      //  stack.addArrangedSubview(authorNameLabel)
         return stack
     }()
     // MARK: - LifeCycle func
     init(viewModel: DetailVCModel) {
         self.viewModel = viewModel
-        print(viewModel.id)
         super.init(nibName: nil, bundle: nil)
 
     }
@@ -66,37 +65,24 @@ class DetailViewController: UIViewController {
         configure()
         setupBarButtonItems()
         dataSourseItem = DataManager.shared.obtainSaveData() //viewModel.obtainSavedData()
-        
-        for item in dataSourseItem{
-            print("datasource = \(item.id)")
-        }
-        print("viewModel = \(viewModel.id!)")
-      //  checViewLikeButton()
-
     }
     
     override func viewIsAppearing(_ animated: Bool) {
         super.viewIsAppearing(animated)
         setupLayout()
-//        dataSourseItem = viewModel.obtainSavedData()
         checViewLikeButton()
     }
     
     // MARK: - private
-    
    private func checViewLikeButton(){
        dataSourseItem = viewModel.obtainSavedData()
        for item in dataSourseItem{
-           print("item = \(item.id)")
-           print("Check viewModel = \(viewModel.id!)")
            if self.viewModel.id! == item.id{
                self.viewModel.isLike = item.isLike
                likeBarButton.image = UIImage(systemName: UISet.S.heartFill.rawValue)
-               print("OK")
                break
            }else{
                likeBarButton.image = UIImage(systemName: UISet.S.heart.rawValue)
-               print("NO")
            }
        }
     }
@@ -135,7 +121,6 @@ class DetailViewController: UIViewController {
                 self.descriptionImageLabel.text = viewModel.description
             }catch{
                 imageView.image = UIImage(systemName:UISet.S.errorLoadImg.rawValue)
-             //   descriptionImageLabel.text = ""
                 likeBarButton.isEnabled = false
             }
         }

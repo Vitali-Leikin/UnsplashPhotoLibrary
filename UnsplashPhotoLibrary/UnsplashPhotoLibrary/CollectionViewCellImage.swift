@@ -8,8 +8,10 @@
 import UIKit
 
 class CollectionViewCellImage: UICollectionViewCell {
+    // MARK: - private property
     private var dataSource: CellViewModel?
-
+    
+    // MARK: - private lazy UI
     private let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -26,23 +28,23 @@ class CollectionViewCellImage: UICollectionViewCell {
         button.addTarget(self,action: #selector(pressedLikeButton), for: .touchUpInside)
         return button
     }()
-    override func prepareForReuse() {
+    
+    // MARK: - prepare CELL func
+    override  func prepareForReuse() {
         super.prepareForReuse()
         if self.subviews.contains(likeButton){
             self.contentView.removeFromSuperview()
             imageView.image = .remove
-
         }
     }
-    
-    
+    // MARK: -  @objc func
     @objc
-    func pressedLikeButton(){
+   private func pressedLikeButton(){
         guard let dataSource = dataSource else {return}
         if dataSource.isLike{
             dataSource.isLike.toggle()
             print("isLIKE")
-            DataManager.shared.deleteOneObject(id: dataSource.id)
+            DataManager.shared.removeOneObject(id: dataSource.id)
             likeButton.setImage(UIImage(systemName: "heart"), for: .normal)
         }else{
             
@@ -53,17 +55,18 @@ class CollectionViewCellImage: UICollectionViewCell {
         }
     }
     
+    
+    // MARK: - setup Layout and cofigure Cell
+    
     func configereCell(by dataSource: CellViewModel){
-       guard let url = dataSource.imageUrl else {return}
+        guard let url = dataSource.imageUrl else {return}
         self.dataSource = dataSource
-        
-        
         let array =  DataManager.shared.obtainSaveData()
+        
         for item in array{
             if item.id == dataSource.id{
             }
         }
-
         Task{
             do{
                 let image = try await ImageNetworkManager.shared.downloadImage(by: url)
@@ -79,6 +82,7 @@ class CollectionViewCellImage: UICollectionViewCell {
         }
         setupLayout()
     }
+    
     private func setupLayout(){
         contentView.addSubview(imageView)
         contentView.addSubview(likeButton)
@@ -95,7 +99,7 @@ class CollectionViewCellImage: UICollectionViewCell {
         )
     }
 }
-
+// MARK: - extension
 
 extension CollectionViewCellImage{
     static func obtainCellName() -> String{

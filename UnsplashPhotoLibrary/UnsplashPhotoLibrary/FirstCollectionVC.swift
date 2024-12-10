@@ -21,7 +21,6 @@ class FirstCollectionVC: UIViewController {
                           width: Int(view.bounds.width) - UIProperty.position.rawValue * 2,
                           height: Int(view.bounds.height - CGFloat((UIProperty.heightTitleLabel.rawValue + UIProperty.heightCVCell.rawValue)))),
             collectionViewLayout: layout)
-        
         collection.translatesAutoresizingMaskIntoConstraints = false
         collection.delegate = self
         collection.dataSource = self
@@ -43,10 +42,6 @@ class FirstCollectionVC: UIViewController {
         return layout
     }()
     
-    
-//    override func loadView() {
-//        super.loadView()
-//    }
     // MARK: - LifeCycle func
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,7 +56,6 @@ class FirstCollectionVC: UIViewController {
         bindViewModel()
     }
     
-    
     // MARK: - Setup Layout func
     func setupConstraintsColectionView(){
         view.addSubview(collectionView)
@@ -75,7 +69,6 @@ class FirstCollectionVC: UIViewController {
     private func setupBarButtonItems() {
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(openDetails))
     }
-    
     
     // MARK: -  functions
     func bindViewModel() {
@@ -94,29 +87,7 @@ class FirstCollectionVC: UIViewController {
         let controller = SaveViewController()
         self.navigationController?.pushViewController(controller, animated: true)
     }
-    
 
-    //    MARK: - remove
-    //    private func createLayout() -> UICollectionViewLayout {
-    //        // section -> groups -> items -> size
-    //        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-    //                                              heightDimension: .fractionalHeight(1.0))
-    //        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-    //        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.3),
-    //                                               heightDimension: .fractionalWidth(0.3))
-    //        //        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 2)
-    //        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, repeatingSubitem: item, count: 3)
-    //
-    //        let spacing = CGFloat(1)
-    //        group.interItemSpacing = .fixed(spacing)
-    //        let section = NSCollectionLayoutSection(group: group)
-    //        section.interGroupSpacing = spacing
-    //        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: spacing, bottom: 0, trailing: spacing)
-    //        let layout = UICollectionViewCompositionalLayout(section: section)
-    //        return layout
-    //    }
-    
-    
     func reloadCollectionView(){
         DispatchQueue.main.async{
             self.collectionView.reloadData()
@@ -128,7 +99,6 @@ class FirstCollectionVC: UIViewController {
         let controller = DetailViewController(viewModel: detailsModel)
         self.navigationController?.pushViewController(controller, animated: true)
     }
-    
 }
 
 

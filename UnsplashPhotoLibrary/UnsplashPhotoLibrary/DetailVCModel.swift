@@ -8,6 +8,7 @@
 import UIKit
 
 class DetailVCModel:Codable{
+    // MARK: - property
     var imageUrl: String?
     var thumbUrl: String?
     var description: String?
@@ -15,6 +16,7 @@ class DetailVCModel:Codable{
     var isLike: Bool = false
     var width: Int
     var height: Int
+    
     init(model: LoadedModel) {
         self.imageUrl = model.urls?.small
         self.description = model.description
@@ -23,13 +25,14 @@ class DetailVCModel:Codable{
         self.width = model.width!
         self.height = model.height!
     }
+    // MARK: - public Func
     func obtainSavedData() -> [StorageModel]{
         return  DataManager.shared.obtainSaveData()
     }
     func removeObject(){
         print("remove")
         isLike = false
-        DataManager.shared.deleteOneObject(id: id!)
+        DataManager.shared.removeOneObject(id: id!)
     }
     func saveObject(image: UIImage? ){
         guard let img = image else{return}

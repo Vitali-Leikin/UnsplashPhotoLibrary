@@ -7,20 +7,17 @@
 
 import UIKit
 
-
+// MARK: - Extension FirstCollectionVC
 extension FirstCollectionVC: UICollectionViewDelegate, UICollectionViewDataSource{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-       // viewModel.numberOfrows()
         dataSource.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CollectionViewCellImage.obtainCellName(), for: indexPath) as? CollectionViewCellImage else{ return UICollectionViewCell()}
-        
         if dataSource.count <= 0{
             reloadCollectionView()
         }
-        
         cell.configereCell(by: CellViewModel(model: dataSource[indexPath.row]))
         return cell
     }
@@ -33,10 +30,6 @@ extension FirstCollectionVC: UICollectionViewDelegate, UICollectionViewDataSourc
         if indexPath.item == dataSource.count - 1{
             viewModel.getData()
             reloadCollectionView()
-            
         }
-        
     }
-    
-    
 }

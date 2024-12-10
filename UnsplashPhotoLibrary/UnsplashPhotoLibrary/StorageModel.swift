@@ -9,7 +9,7 @@ import Foundation
 
 struct StorageModel: Codable {
     var imageName: String
-    var textComment: String
+    var description: String
     var id: String
     var isLike: Bool
 }

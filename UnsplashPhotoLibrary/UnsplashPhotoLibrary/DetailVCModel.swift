@@ -15,7 +15,6 @@ class DetailVCModel:Codable{
     var isLike: Bool = false
     var width: Int
     var height: Int
-    
     init(model: LoadedModel) {
         self.imageUrl = model.urls?.small
         self.description = model.description
@@ -36,7 +35,7 @@ class DetailVCModel:Codable{
         guard let img = image else{return}
         let imageSave = DataManager.shared.saveImage(image: img)
         guard let checkSaveImg = imageSave, let describ = description, let checkID = id else {return}
-        let objectSave = StorageModel(imageName: checkSaveImg, textComment: describ, id: checkID, isLike: isLike)
+        let objectSave = StorageModel(imageName: checkSaveImg, description: describ, id: checkID, isLike: isLike)
         DataManager.shared.saveData([objectSave])
     }
     

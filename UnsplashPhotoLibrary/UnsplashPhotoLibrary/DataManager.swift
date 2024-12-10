@@ -40,7 +40,9 @@ class DataManager{
         
     }
     
-    func saveData(_ object:[StorageModel]){
+    
+    
+func saveData(_ object:[StorageModel]){
         var array = obtainSaveData()
         array += object
         do{
@@ -50,7 +52,27 @@ class DataManager{
         }catch{
             print("Error save" , error.localizedDescription)
         }
-  
+        
+    }
+    
+    func saveCellobject(object: CellViewModel){
+        guard let safeImage = object.fullImageUrl else{print(NetworkError.canNotParseData)
+            return}
+print(safeImage)
+        
+        Task{
+            do{
+                let img = try await ImageNetworkManager.shared.downloadImage(by: safeImage)
+                guard let savedImg = img else{return}
+                let imageSave = DataManager.shared.saveImage(image: savedImg)
+                guard let checkedImg = imageSave else{return}
+                
+                let objectSave = StorageModel(imageName: checkedImg, description: object.describe, id: object.id, isLike: object.isLike)
+                DataManager.shared.saveData([objectSave])
+            }catch{
+                NetworkError.canNotParseData
+            }
+        }
         
     }
     

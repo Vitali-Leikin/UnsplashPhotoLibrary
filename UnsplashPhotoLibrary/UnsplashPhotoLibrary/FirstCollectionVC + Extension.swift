@@ -10,14 +10,15 @@ import UIKit
 
 extension FirstCollectionVC: UICollectionViewDelegate, UICollectionViewDataSource{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        viewModel.numberOfrows()
+       // viewModel.numberOfrows()
+        dataSource.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CollectionViewCellImage.obtainCellName(), for: indexPath) as? CollectionViewCellImage else{ return UICollectionViewCell()}
         
         if dataSource.count <= 0{
-            return UICollectionViewCell()
+            reloadCollectionView()
         }
         
         cell.configereCell(by: CellViewModel(model: dataSource[indexPath.row]))

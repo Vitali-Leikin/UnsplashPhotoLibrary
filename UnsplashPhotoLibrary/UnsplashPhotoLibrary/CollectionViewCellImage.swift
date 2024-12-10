@@ -8,6 +8,8 @@
 import UIKit
 
 class CollectionViewCellImage: UICollectionViewCell {
+    private var dataSource: CellViewModel?
+
     private let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -21,6 +23,7 @@ class CollectionViewCellImage: UICollectionViewCell {
         config.buttonSize = .large
         config.baseForegroundColor = .green
         button.configuration = config
+        button.addTarget(self,action: #selector(pressedLikeButton), for: .touchUpInside)
         return button
     }()
     override func prepareForReuse() {
@@ -31,8 +34,36 @@ class CollectionViewCellImage: UICollectionViewCell {
 
         }
     }
-    func configereCell(by dataSourse: CellViewModel){
-       guard let url = dataSourse.imageUrl else {return}
+    
+    
+    @objc
+    func pressedLikeButton(){
+        guard let dataSource = dataSource else {return}
+        if dataSource.isLike{
+            dataSource.isLike.toggle()
+            print("isLIKE")
+            DataManager.shared.deleteOneObject(id: dataSource.id)
+            likeButton.setImage(UIImage(systemName: "heart"), for: .normal)
+        }else{
+            
+            dataSource.isLike.toggle()
+            DataManager.shared.saveCellobject(object: dataSource)
+            likeButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+            print("DONt like")
+        }
+    }
+    
+    func configereCell(by dataSource: CellViewModel){
+       guard let url = dataSource.imageUrl else {return}
+        self.dataSource = dataSource
+        
+        
+        let array =  DataManager.shared.obtainSaveData()
+        for item in array{
+            if item.id == dataSource.id{
+            }
+        }
+
         Task{
             do{
                 let image = try await ImageNetworkManager.shared.downloadImage(by: url)
@@ -41,7 +72,7 @@ class CollectionViewCellImage: UICollectionViewCell {
                 print("error load image")
             }
         }
-        if dataSourse.isLike {
+        if dataSource.isLike {
             likeButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
         }else{
             likeButton.setImage(UIImage(systemName: "heart"), for: .normal)

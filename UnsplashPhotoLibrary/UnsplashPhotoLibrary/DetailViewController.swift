@@ -20,10 +20,19 @@ class DetailViewController: UIViewController {
         return imageView
     }()
     
-    private lazy var descriptionLabel: UILabel = {
+    private lazy var descriptionImageLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.backgroundColor = .green
+      //  label.backgroundColor = .green
+        label.numberOfLines = 0
+        label.textAlignment = .natural
+        return label
+    }()
+    
+    private lazy var authorNameLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+     //   label.backgroundColor = .green
         label.numberOfLines = 0
         label.textAlignment = .natural
         return label
@@ -33,6 +42,19 @@ class DetailViewController: UIViewController {
         let barButtonItem = UIBarButtonItem(image: UIImage(systemName:"heart"), style: .plain, target: self, action: #selector(didSelectButtonClicked(_:)))
         return barButtonItem
     }()
+    
+    private lazy var stackView: UIStackView = {
+        let stack = UIStackView()
+        stack.translatesAutoresizingMaskIntoConstraints = false
+      //  stack.backgroundColor = .red
+        stack.alignment = .fill
+        stack.distribution = .fillEqually
+        stack.axis = .vertical
+        stack.addArrangedSubview(descriptionImageLabel)
+        stack.addArrangedSubview(authorNameLabel)
+        return stack
+    }()
+    
 
     init(viewModel: DetailVCModel) {
         self.viewModel = viewModel
@@ -103,10 +125,10 @@ class DetailViewController: UIViewController {
         Task{
             do{
                 imageView.image = try await ImageNetworkManager.shared.downloadImage(by:stringURL)
-                self.descriptionLabel.text = viewModel.description
+                self.descriptionImageLabel.text = viewModel.description
             }catch{
                 imageView.image = UIImage(systemName: "xmark.icloud")
-                descriptionLabel.text = ""
+                descriptionImageLabel.text = ""
                 likeBarButton.isEnabled = false
             }
         }
@@ -114,17 +136,18 @@ class DetailViewController: UIViewController {
  
     private func setupLayout(){
         view.addSubview(imageView)
-        view.addSubview(descriptionLabel)
+        view.addSubview(stackView)
+        
         NSLayoutConstraint.activate(
             [
                 imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
                 imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
                 imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
                 imageView.bottomAnchor.constraint(equalTo: view.centerYAnchor),
-                descriptionLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 30),
-                descriptionLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
-                descriptionLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
-                descriptionLabel.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor)
+                stackView.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 30),
+                stackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+                stackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+                stackView.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor)
             ]
         )
     }

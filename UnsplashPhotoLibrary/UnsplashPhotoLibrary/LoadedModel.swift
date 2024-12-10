@@ -26,7 +26,7 @@ struct LoadedModel: Codable, Identifiable {
  //   let sponsorship: String?
 //    let topicSubmissions: TopicSubmissions?
  //   let assetType: String?
-//    let user: User?
+  //  let user: User?
 //    let exif: Exif?
 //    let location: Location?
  //   let views, downloads: Int?

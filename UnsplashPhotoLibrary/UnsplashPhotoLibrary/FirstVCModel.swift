@@ -30,6 +30,18 @@ class FirstVCModel{
                 print(error)
             }
         }
-        
+    }
+    
+    func getRefreshData(){
+        network.obtainRefreshData{[weak self] result in
+            self?.isLoading.value = false
+            switch result {
+            case .success(let data):
+                self?.dataSourse = data
+                self?.mapLoadedData()
+            case .failure(let error):
+                print(error)
+            }
+        }
     }
 }

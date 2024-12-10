@@ -12,7 +12,7 @@ class FirstCollectionVC: UIViewController {
     
     var viewModel: FirstVCModel = FirstVCModel()
     var dataSource:[LoadedModel] = []
-
+    let refreshControl = UIRefreshControl()
     // MARK: - lazy property
     lazy var collectionView: UICollectionView = {
         var collection = UICollectionView(
@@ -25,7 +25,7 @@ class FirstCollectionVC: UIViewController {
         collection.delegate = self
         collection.dataSource = self
         collection.isUserInteractionEnabled = true
-        collection.backgroundColor = .gray
+        collection.backgroundColor = .white
         collection.register(CollectionViewCellImage.self, forCellWithReuseIdentifier: CollectionViewCellImage.obtainCellName())
         return collection
     }()
@@ -48,10 +48,12 @@ class FirstCollectionVC: UIViewController {
         view.backgroundColor = .white
         viewModel.getData()
         setupBarButtonItems()
+        setupRefreshControl()
     }
     
     override func viewIsAppearing(_ animated: Bool) {
         super.viewIsAppearing(animated)
+        navigationItem.title = "Unsplash Photo Library"
         setupConstraintsColectionView()
         bindViewModel()
     }
@@ -65,6 +67,12 @@ class FirstCollectionVC: UIViewController {
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+    }
+    
+    func setupRefreshControl(){
+        refreshControl.addTarget(self, action: #selector(appendNewElements), for: .valueChanged)
+        collectionView.refreshControl = refreshControl
+
     }
     private func setupBarButtonItems() {
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(openDetails))
@@ -98,6 +106,17 @@ class FirstCollectionVC: UIViewController {
         let detailsModel = DetailVCModel(model: dataSource[indexPath.row])
         let controller = DetailViewController(viewModel: detailsModel)
         self.navigationController?.pushViewController(controller, animated: true)
+    }
+    
+    
+    // MARK: - refresh CollectionView func
+    
+    @objc
+    func appendNewElements(){
+        refreshControl.beginRefreshing()
+        viewModel.getRefreshData()
+        refreshControl.endRefreshing()
+        reloadCollectionView()
     }
 }
 

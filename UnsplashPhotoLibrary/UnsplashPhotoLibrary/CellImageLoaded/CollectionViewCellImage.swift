@@ -12,13 +12,13 @@ class CollectionViewCellImage: UICollectionViewCell {
     private var dataSource: CellViewModel?
     
     // MARK: - private lazy UI
-    private let imageView: UIImageView = {
+    private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.backgroundColor = .white
         return imageView
     }()
-    private let likeButton: UIButton = {
+    private lazy var likeButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         var config = UIButton.Configuration.plain()

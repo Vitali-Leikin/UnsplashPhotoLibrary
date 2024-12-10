@@ -10,8 +10,7 @@ import UIKit
 // MARK: - Extension FirstCollectionVC
 extension FirstCollectionVC: UICollectionViewDelegate, UICollectionViewDataSource{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        //dataSource.count
-        return  viewModel.obtainNumbersOfrows() > 0 ? viewModel.obtainNumbersOfrows() : 1
+        dataSource.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

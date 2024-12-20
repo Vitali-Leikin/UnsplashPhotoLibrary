@@ -35,6 +35,7 @@ class DataManager{
     }
     
     func removeAllObject(){
+        removeSavedIMG()
         saveDataINside([])
     }
     // MARK: - Save public func
@@ -108,7 +109,7 @@ class DataManager{
         }
         return []
     }
-
+    
     func loadImage(fileName:String) -> UIImage? {
         let documentDirectory = FileManager.SearchPathDirectory.documentDirectory
         let userDomainMask = FileManager.SearchPathDomainMask.userDomainMask
@@ -120,5 +121,18 @@ class DataManager{
             return image
         }
         return nil
+    }
+
+    func removeSavedIMG(){
+        let obtainedData = obtainSaveData()
+        obtainedData.forEach { item in
+            let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            let tempPath = documentsDirectory.appendingPathComponent(item.imageName)
+            do {
+                try FileManager.default.removeItem(at: tempPath)
+            }catch{
+                print("error delete files \(error.localizedDescription)")
+            }
+        }
     }
 }

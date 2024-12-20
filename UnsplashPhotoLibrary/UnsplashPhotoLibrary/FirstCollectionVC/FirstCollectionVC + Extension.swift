@@ -29,7 +29,8 @@ extension FirstCollectionVC: UICollectionViewDelegate, UICollectionViewDataSourc
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath)  {
         if indexPath.item == dataSource.count - 1{
             viewModel.getData()
-            reloadCollectionView()
+            collectionView.reloadItems(at: [indexPath])
+          //  reloadCollectionView()
         }
     }
 }

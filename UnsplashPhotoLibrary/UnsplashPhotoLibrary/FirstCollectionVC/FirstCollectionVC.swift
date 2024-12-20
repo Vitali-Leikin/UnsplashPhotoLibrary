@@ -30,17 +30,15 @@ class FirstCollectionVC: UIViewController {
         return collection
     }()
     
-    private lazy var layout: UICollectionViewFlowLayout = {
+     lazy var layout: UICollectionViewFlowLayout = {
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        let wSize = ((view.bounds.size.width - 3) / 3)
-        layout.itemSize = CGSize(width: wSize, height: wSize)
-        layout.minimumInteritemSpacing = CGFloat(1)
-        layout.minimumLineSpacing = CGFloat(1)
+        layout.minimumInteritemSpacing = CGFloat(0)
+        layout.minimumLineSpacing = CGFloat(0)
         layout.scrollDirection = .vertical
         return layout
     }()
-    
+
     // MARK: - LifeCycle func
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,6 +47,7 @@ class FirstCollectionVC: UIViewController {
         setupBarButtonItems()
         setupRefreshControl()
         swipeVCtoSaveVC()
+
     }
     
     override func viewIsAppearing(_ animated: Bool) {
@@ -68,7 +67,7 @@ class FirstCollectionVC: UIViewController {
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
-    
+  
     func setupRefreshControl(){
         refreshControl.addTarget(self, action: #selector(appendNewElements), for: .valueChanged)
         collectionView.refreshControl = refreshControl

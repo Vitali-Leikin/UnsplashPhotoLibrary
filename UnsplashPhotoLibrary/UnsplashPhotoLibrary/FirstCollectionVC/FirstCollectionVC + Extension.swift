@@ -12,7 +12,7 @@ extension FirstCollectionVC: UICollectionViewDelegate, UICollectionViewDataSourc
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         dataSource.count
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CollectionViewCellImage.obtainCellName(), for: indexPath) as? CollectionViewCellImage else{ return UICollectionViewCell()}
         if dataSource.count <= 0{
@@ -30,7 +30,16 @@ extension FirstCollectionVC: UICollectionViewDelegate, UICollectionViewDataSourc
         if indexPath.item == dataSource.count - 1{
             viewModel.getData()
             collectionView.reloadItems(at: [indexPath])
-          //  reloadCollectionView()
         }
+    }
+}
+extension FirstCollectionVC: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let width = collectionView.bounds.width
+        let numberOfItemsPerRow: CGFloat = 3
+        let spacing: CGFloat = layout.minimumInteritemSpacing
+        let availableWidth = width - spacing * (numberOfItemsPerRow + 1)
+        let itemDimension = floor(availableWidth / numberOfItemsPerRow)
+        return CGSize(width: itemDimension, height: itemDimension)
     }
 }

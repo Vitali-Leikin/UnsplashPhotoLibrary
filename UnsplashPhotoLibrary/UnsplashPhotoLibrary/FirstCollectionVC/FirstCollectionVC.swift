@@ -47,7 +47,6 @@ class FirstCollectionVC: UIViewController {
         setupBarButtonItems()
         setupRefreshControl()
         swipeVCtoSaveVC()
-
     }
     
     override func viewIsAppearing(_ animated: Bool) {
@@ -82,9 +81,9 @@ class FirstCollectionVC: UIViewController {
         self.view.addGestureRecognizer(swipeLeft)
     }
     
-    
     // MARK: -  functions
-    func bindViewModel() {
+    @MainActor
+   func bindViewModel() {
         viewModel.cellDataSource.bind { [weak self] itemData in
             guard let self = self,
                   let imageData = itemData else {
